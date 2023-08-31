@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+        <title>Rupicard SheetDB</title>
+</head>
+
+<body>
+        <form id="userDataForm">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required><br><br>
+
+                <label for="mobile">Mobile Number:</label>
+                <input type="tel" id="mobile" name="mobile" pattern="[0-9]{10}" required><br><br>
+
+                <button type="submit">Submit</button>
+        </form>
+
+        <script>
+                document.getElementById("userDataForm").addEventListener("submit", function (event) {
+                        event.preventDefault();
+
+                        const name = document.getElementById("name").value;
+                        const mobile = document.getElementById("mobile").value;
+
+                        sendDataToGoogleSheets(name, mobile);
+                        document.getElementById("name").value = "";
+                        document.getElementById("mobile").value = "";
+                });
+
+                function sendDataToGoogleSheets(name, mobile) {
+                        const scriptUrl = "https://script.google.com/macros/s/AKfycbwmAyxjt1JlOQh0zQMgXCiT4ZoxbE45giBpE5gFdDlYasIFwe5hxtS3pII5OhB3S-8R/exec";
+                        const finalUrl = `${scriptUrl}?name=${encodeURIComponent(name)}&mobile=${encodeURIComponent(mobile)}`;
+
+                        fetch(finalUrl)
+                                .then(response => response.text())
+                                .then(data => {
+                                        alert(data);
+                                })
+                                .catch(error => {
+                                        console.error('Error:', error);
+                                });
+                }
+        </script>
+</body>
+
+</html>
